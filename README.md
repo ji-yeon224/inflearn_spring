@@ -108,7 +108,8 @@ public class SpringConfig {
 
 :heavy_check_mark:필드 주입
 
-``` @Autowired private MemberService memberService;
+``` 
+@Autowired private MemberService memberService;
 ```
 
 :heavy_check_mark: setter주입
