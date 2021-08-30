@@ -48,5 +48,75 @@ public void afterEach(){
     repository.clearStore();
 }
 ```
-    
+
+-------------
+
+:calendar: 21.08.30 스프링 빈과 의존관계
+
+:heavy_check_mark: 의존성 주입(Dependency Ingection), DI : 객체 의존관계를 외부에서 넣어주는 것
+생성자에 @Autowired가 있으면 스프링이 연관된 객체를 컨테이너에서 찾아서 넣어줌.
+
+```
+@Autowired
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
+    }
+```
+
+### 컴포넌트 스캔과 자동 의존관계 설정
+:heavy_check_mark: @Controller, @Service, @Repository는 @Component를 포함하기 때문에 스프링 빈으로 등록이 된다. 
+:heavy_check_mark: 생성자에 @Autowired를 사용하면 객체가 생성되는 시점에 스프링 컨테이너에서 해당 스프링 빈을 찾아서 주입한다. 
+
+※ 스프링은 스프링 컨테이너에 빈을 등록할 때 싱글톤으로 등록한다. 하나만 등록해서 이를 공유한다. -> 메모리 절약 가능
+
+### 자바 코드로 직접 스프링 빈 등록하기
+
+```
+@Configuration
+public class SpringConfig {
+
+    @Bean
+    public MemberService memberService(){
+        return new MemberService(memberRepository());
+    }
+
+    @Bean
+    public MemberRepository memberRepository(){
+        return new MemoryMemberRepository();
+    }
+
+}
+
+```
+새로운 파일을 생성하여 @Configuration으로 설정파일로 등록한다.
+@Bean을 보고 스프링 빈에 등록해줌.
+나중에 구현체를 변경을 해야하는 경우에 자바 코드로 스프링 빈을 설정하는 방식이 용이함.
  
+ 
+### DI 방식
+ 
+:heavy_check_mark:생성자 주입
+=> 권장하는 방식
+처음 생성시 주입하고 그 이후에 변경되지 않도록 함. 의존관계가 실행 중에 동적으로 바뀌는 경우가 거의 없음.
+
+```
+ @Autowired
+ public MemberService(MemberRepository memberRepository) { 
+        this.memberRepository = memberRepository;
+    }
+```
+
+:heavy_check_mark:필드 주입
+
+``` @Autowired private MemberService memberService;
+```
+
+:heavy_check_mark: setter주입
+setter를 호출하려면 public으로 설정해야하는데, 잘못 바꿔질 우려 있음.
+
+```
+@Autowired
+public void setMemberService(MemberService memberService){
+        this.memberService = memberService;
+    }
+```
