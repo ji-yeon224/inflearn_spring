@@ -121,3 +121,21 @@ public void setMemberService(MemberService memberService){
         this.memberService = memberService;
     }
 ```
+
+-----------
+
+:calendar: 21.09.01 스프링 DB 접근기술(1)
+
+:heavy_check_mark: MemoryMemberRepository를 실제 db연결해서 JdbcMemberRepository를 새로 만듦.
+
+:heavy_check_mark: 기존 코드를 손대지 않고, SpringConfig파일의 설정만 수정하여 repository를 번경함. -> 스프링의 DI를 사용
+```
+public MemberRepository memberRepository(){
+        //return new MemoryMemberRepository();
+        return new JdbcMemberRepository(dataSource);
+    }
+```
+
+=> 개방-폐쇄 원칙(OCP, Open-Closed Principle): 확장에는 열려있고, 수정과 변경에는 닫혀있다. 
+
+:heavy_check_mark: 데이터를 DB에 저장하므로 스프링 서버를 재실행해도 기존 데이터가 저장되어 있다.
