@@ -139,3 +139,67 @@ public MemberRepository memberRepository(){
 => 개방-폐쇄 원칙(OCP, Open-Closed Principle): 확장에는 열려있고, 수정과 변경에는 닫혀있다. 
 
 :heavy_check_mark: 데이터를 DB에 저장하므로 스프링 서버를 재실행해도 기존 데이터가 저장되어 있다.
+
+
+------------
+
+
+:calendar: 21.09.07 스프링 DB 접근기술(2)
+
+### JPA
+
+:heavy_check_mark: JPA는 기본적인 SQL문을 직접 만들어 준다.-> 생산성 향상
+
+:heavy_check_mark: JPA를 통한 데이터 변경은 트랜잭션 (@Transactional)안에서 실행해야 한다. 
+
+
+### 스프링 데이터 JPA
+
+:heavy_check_mark: 리포지토리에 구현클래스 없이 인터페이스 만으로 개발 완료할 수 있다.
+
+:heavy_check_mark: 인터페이스를 통해 기본적인 CRUD를 제공한다. 
+
+:heavy_check_mark: findByName(), findByEmail()처럼 메서드 이름으로만 조회 가능.
+
+
+-------------
+
+:calendar: 21.09.13 AOP
+
+### AOP
+
+:heavy_check_mark: AOP: Aspect Oriented Programming
+
+:heavy_check_mark: 공통 관심사항과 핵심 관심사항을 분리하여 원하는 곳에만 공통 관심 사항을 적용시킨다. 
+
+```
+@Aspect
+@Component
+public class TimeTraceAop {
+
+    @Around("execution(* hello.hellospring..*(..))") //원하는 적용 대상 지정
+    public Object execut(ProceedingJoinPoint joinPoint) throws Throwable{
+        long start = System.currentTimeMillis();
+        System.out.println("START: "+joinPoint.toString());
+        try{
+            return joinPoint.proceed();
+        }finally{
+            long finish = System.currentTimeMillis();
+            long timeMs = finish = start;
+            System.out.println("END: "+joinPoint.toString()+" " + timeMs + "ms");
+
+        }
+
+    }
+}
+```
+:heavy_check_mark: @Aspect어노테이션을 이용하여 AOP구현한다.
+
+:heavy_check_mark: @Around 어노테이션을 이용하여 AOP를 적용할 대상을 지정한다.
+
+
+### AOP 동작 방식
+
+:heavy_check_mark: AOP적용 시 실제 클래스가 빈으로 등록되는 것이 아니라 가짜 클래스 즉, 프록시를 주입하여 AOP를 적용한다. 
+
+
